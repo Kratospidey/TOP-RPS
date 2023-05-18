@@ -42,17 +42,11 @@ function playRound(playerSelection, computerSelection) {
 
 function validateUserChoice(playerSelection = "") {
 	// condition to check if it's a valid choice
-	//! console.log(playerSelection);
-	if (
+	return (
 		playerSelection == "Rock" ||
 		playerSelection == "Paper" ||
 		playerSelection == "Scissors"
-	) {
-		return true;
-	} else {
-		// console.log("Choose a valid option!");
-		return false;
-	}
+	);
 }
 
 function round() {
@@ -63,7 +57,7 @@ function round() {
 
 	// while loop to run n times where n is the constant COUNT defined abobe
 	while (counter <= COUNT) {
-		// do while loop since the first run userChoice will be empty so it would be invalid
+		// do while loop since the first run userChoice will be empty so it would be invalid and never start running unless do while
 		do {
 			userChoice = prompt("Enter either Rock or Paper or Scissors");
 			if (userChoice !== null) {
@@ -71,22 +65,18 @@ function round() {
 					userChoice.charAt(0).toUpperCase() +
 					userChoice.slice(1).toLowerCase();
 			}
-		} while (
-			!validateUserChoice(userChoice) &&
-			userChoice !== null
-		); /* not valid since you want to keep on executing until valid stops returning false 
+			// essentially checking if user clicked cancel at the prompt so it only terminates if they did
+			if (userChoice === null) {
+				return;
+			}
+		} while (!validateUserChoice(userChoice));
+		/* not valid since you want to keep on executing until valid stops returning false 
              (but false will cause the loop to exit and move ahead even though 
                 it's not valid so we use not to inverse the logic essentialy ) so when valid returns true 
-                aka it's a valid choice and also not null the boolean becomes false and the while loop is terminated */
-		// essentially checking if user click cancel at the prompt so it only continues if they didn't
-		if (userChoice !== null) {
-			let computerChoice = getComputerChoice();
-			alert(playRound(userChoice, computerChoice));
-		}
-		// if user clicked cancel then quit the program
-		else {
-			return;
-		}
+                aka it's a valid choice, boolean becomes false and the while loop is terminated */
+
+		let computerChoice = getComputerChoice();
+		alert(playRound(userChoice, computerChoice));
 		counter++;
 	}
 	// calling the function to display the winner
@@ -94,25 +84,14 @@ function round() {
 }
 
 function getWinner() {
-	// variable to store the name of the winner
-	let winner;
 	// if condition for a tie
 	if (userScore == computerScore) {
 		return `It's a tie!
         Score :- ${userScore}:${computerScore}`;
-	} else {
-		// user has won
-		if (userScore > computerScore) {
-			winner = "User";
-		}
-		// computer has won
-		else {
-			winner = "Computer";
-		}
-		// return the string containing who won and the total score
-		return `${winner} won! 
-        Score :- ${userScore}:${computerScore}`;
 	}
+	// return the string containing who won and the total score and tertiary expression to determine who won
+	return `${userScore > computerScore ? "User" : "Computer"} won! 
+    Score :- ${userScore}:${computerScore}`;
 }
 
 // starting the game
