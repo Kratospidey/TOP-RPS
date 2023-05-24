@@ -88,4 +88,28 @@ function getWinner() {
 }
 
 // starting the game
-round();
+// round();
+
+// event listener for rock
+const rock = document.querySelector(`#rock`);
+
+rock.addEventListener("click", () => {
+	alert(playRound("Rock", getComputerChoice()));
+	console.log("logged");
+});
+
+// event listener for paper
+const paper = document.querySelector(`#paper`);
+
+paper.addEventListener("click", () => {
+	alert(playRound("Paper", getComputerChoice()));
+	console.log("logged");
+});
+
+// event listener for scissors
+const scissors = document.querySelector(`#scissors`);
+
+scissors.addEventListener("click", () => {
+	alert(playRound("Scissors", getComputerChoice()));
+	console.log("logged");
+});
