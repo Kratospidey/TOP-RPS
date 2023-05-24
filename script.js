@@ -50,37 +50,30 @@ function validateUserChoice(playerSelection = "") {
 }
 
 function round() {
-	// constant - total number of rounds
-	const COUNT = 5;
-	let counter = 1;
 	let userChoice = "";
 
-	// while loop to run n times where n is the constant COUNT defined abobe
-	while (counter <= COUNT) {
-		// do while loop since the first run userChoice will be empty so it would be invalid and never start running unless do while
-		do {
-			userChoice = prompt("Enter either Rock or Paper or Scissors");
-			if (userChoice !== null) {
-				userChoice =
-					userChoice.charAt(0).toUpperCase() +
-					userChoice.slice(1).toLowerCase();
-			}
-			// essentially checking if user clicked cancel at the prompt so it only terminates if they did
-			if (userChoice === null) {
-				return;
-			}
-		} while (!validateUserChoice(userChoice));
-		/* not valid since you want to keep on executing until valid stops returning false 
+	// do while loop since the first run userChoice will be empty so it would be invalid and never start running unless do while
+	do {
+		userChoice = prompt("Enter either Rock or Paper or Scissors");
+		if (userChoice !== null) {
+			userChoice =
+				userChoice.charAt(0).toUpperCase() + userChoice.slice(1).toLowerCase();
+		}
+		// essentially checking if user clicked cancel at the prompt so it only terminates if they did
+		if (userChoice === null) {
+			return;
+		}
+	} while (!validateUserChoice(userChoice));
+	/* not valid since you want to keep on executing until valid stops returning false 
              (but false will cause the loop to exit and move ahead even though 
                 it's not valid so we use not to inverse the logic essentialy ) so when valid returns true 
                 aka it's a valid choice, boolean becomes false and the while loop is terminated */
 
-		let computerChoice = getComputerChoice();
-		alert(playRound(userChoice, computerChoice));
-		counter++;
-	}
+	let computerChoice = getComputerChoice();
+	alert(playRound(userChoice, computerChoice));
+	counter++;
 	// calling the function to display the winner
-	alert(getWinner());
+	// alert(getWinner());
 }
 
 function getWinner() {
