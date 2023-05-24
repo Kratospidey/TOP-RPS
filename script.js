@@ -1,5 +1,21 @@
 let userScore = 0; // number of rounds the user has won
 let computerScore = 0; // number of rounds the computer has won
+let turns = 0; // number of turns played
+let scoreDiv = document.querySelector("#score"); // div to display the score
+let userCScore = `User: ${userScore}`; // string to format user's score
+let computerCScore = `Computer: ${computerScore}`; // string to format computer's score
+let userVScore = document.createElement("h2"); // h1 node to store and update user's score which is displayed in div
+let computerVScore = document.createElement("h2"); // h1 node to store and update computer's score which is displayed in div
+userVScore.innerText = userCScore; // inserting the string inside the h1 node
+computerVScore.innerText = computerCScore; // inserting the string inside the h1 node
+let matchResult = document.createElement("h3"); // h3 node to store the match result
+let restartButton = document.querySelector(".restart"); // selecting a button with the restart class
+let spacebreak = document.createElement("br"); // creating a br element
+let winner = document.createElement("h1"); // creating h1 node to display the winner at the end
+let scores = document.createElement("div"); // div to move around the scores
+scores.classList.add("scores");
+scores.append(userVScore, computerVScore);
+scoreDiv.append(matchResult, scores, spacebreak, winner); // updating the div with the h1 nodes
 
 // function to get a random choice from computer
 function getComputerChoice() {
@@ -17,99 +33,85 @@ function getComputerChoice() {
 
 // function to play a round determine a winner and modify their total score
 function playRound(playerSelection, computerSelection) {
-	playerSelection =
-		playerSelection.charAt(0).toUpperCase() +
-		playerSelection.slice(1).toLowerCase();
-	// If conditon for tie
-	if (playerSelection == computerSelection) {
-		return `It's a tie!`;
-	}
 	// If condition for all winning cases
-	else if (
+	if (playerSelection === computerSelection) {
+		updateMatchResult(`It's a tie! You both chose ${playerSelection}`);
+		finishGame();
+	} else if (
 		(playerSelection == "Rock" && computerSelection == "Scissors") ||
 		(playerSelection == "Scissors" && computerSelection == "Paper") ||
 		(playerSelection == "Paper" && computerSelection == "Rock")
 	) {
 		userScore++;
-		return `You win! ${playerSelection} beats ${computerSelection}`;
+		updateMatchResult(`You win! ${playerSelection} beats ${computerSelection}`);
+		updateDivScore();
+		finishGame();
 	}
 	// since user hasn't won and it's not a tie, the only remaining option is they lost
 	else {
 		computerScore++;
-		return `You lose! ${computerSelection} beats ${playerSelection}`;
+		updateMatchResult(
+			`You lose! ${playerSelection} beats ${computerSelection}`
+		);
+		updateDivScore();
+		finishGame();
 	}
 }
 
-function validateUserChoice(playerSelection = "") {
-	// condition to check if it's a valid choice
-	return (
-		playerSelection == "Rock" ||
-		playerSelection == "Paper" ||
-		playerSelection == "Scissors"
-	);
+// function to update the player's score
+function updateDivScore() {
+	userCScore = `User: ${userScore}`;
+	computerCScore = `Computer: ${computerScore}`;
+	userVScore.innerText = userCScore;
+	computerVScore.innerText = computerCScore;
 }
 
-function round() {
-	let userChoice = "";
-
-	// do while loop since the first run userChoice will be empty so it would be invalid and never start running unless do while
-	do {
-		userChoice = prompt("Enter either Rock or Paper or Scissors");
-		if (userChoice !== null) {
-			userChoice =
-				userChoice.charAt(0).toUpperCase() + userChoice.slice(1).toLowerCase();
-		}
-		// essentially checking if user clicked cancel at the prompt so it only terminates if they did
-		if (userChoice === null) {
-			return;
-		}
-	} while (!validateUserChoice(userChoice));
-	/* not valid since you want to keep on executing until valid stops returning false 
-             (but false will cause the loop to exit and move ahead even though 
-                it's not valid so we use not to inverse the logic essentialy ) so when valid returns true 
-                aka it's a valid choice, boolean becomes false and the while loop is terminated */
-
-	let computerChoice = getComputerChoice();
-	alert(playRound(userChoice, computerChoice));
-	counter++;
-	// calling the function to display the winner
-	// alert(getWinner());
+// function to reset the game and undo any changes
+function resetGame() {
+	userScore = 0;
+	computerScore = 0;
+	updateDivScore();
+	updateMatchResult("");
+	restartButton.classList.toggle("restart");
+	winner.innerText = "";
 }
 
-function getWinner() {
-	// if condition for a tie
-	if (userScore == computerScore) {
-		return `It's a tie!
-        Score :- ${userScore}:${computerScore}`;
-	}
-	// return the string containing who won and the total score and tertiary expression to determine who won
-	return `${userScore > computerScore ? "User" : "Computer"} won! 
-    Score :- ${userScore}:${computerScore}`;
+// function to update and display the latest match result
+function updateMatchResult(result) {
+	matchResult.innerText = result;
 }
-
-// starting the game
-// round();
-
 // event listener for rock
 const rock = document.querySelector(`#rock`);
 
 rock.addEventListener("click", () => {
-	alert(playRound("Rock", getComputerChoice()));
-	console.log("logged");
+	playRound("Rock", getComputerChoice());
 });
 
 // event listener for paper
 const paper = document.querySelector(`#paper`);
 
 paper.addEventListener("click", () => {
-	alert(playRound("Paper", getComputerChoice()));
-	console.log("logged");
+	playRound("Paper", getComputerChoice());
 });
 
 // event listener for scissors
 const scissors = document.querySelector(`#scissors`);
 
 scissors.addEventListener("click", () => {
-	alert(playRound("Scissors", getComputerChoice()));
-	console.log("logged");
+	playRound("Scissors", getComputerChoice());
+});
+
+// checks if the game has finished, if so prints the winner and enables restart option
+function finishGame() {
+	if (userScore == 5) {
+		restartButton.classList.toggle("restart");
+		winner.innerText = "User won the game!";
+	} else if (computerScore == 5) {
+		restartButton.classList.toggle("restart");
+		winner.innerText = "Computer won the game!";
+	}
+}
+// event listener to call the reset function
+restartButton.addEventListener("click", () => {
+	resetGame();
 });
