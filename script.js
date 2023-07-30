@@ -51,7 +51,7 @@ function playRound(playerSelection, computerSelection) {
 	else {
 		computerScore++;
 		updateMatchResult(
-			`You lose! ${playerSelection} beats ${computerSelection}`
+			`You lose! ${computerSelection} beats ${playerSelection}`
 		);
 		updateDivScore();
 		finishGame();
