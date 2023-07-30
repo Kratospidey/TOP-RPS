@@ -34,7 +34,9 @@ function getComputerChoice() {
 // function to play a round determine a winner and modify their total score
 function playRound(playerSelection, computerSelection) {
 	// If condition for all winning cases
-	if (playerSelection === computerSelection) {
+	if (userScore != 5 && computerScore != 5)
+	{
+		if (playerSelection === computerSelection) {
 		updateMatchResult(`It's a tie! You both chose ${playerSelection}`);
 		finishGame();
 	} else if (
@@ -56,6 +58,9 @@ function playRound(playerSelection, computerSelection) {
 		updateDivScore();
 		finishGame();
 	}
+		
+	}
+	
 }
 
 // function to update the player's score
